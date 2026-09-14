@@ -10,7 +10,18 @@ import type {
   QueryItem
 } from "../types";
 
-const API_BASE_URL = import.meta.env.VITE_API_URL || "http://localhost:5000/api";
+const getApiBaseUrl = () => {
+  let url = (import.meta.env.VITE_API_URL || "http://localhost:5000/api").trim();
+  // Remove trailing slashes
+  url = url.replace(/\/+$/, "");
+  // Automatically append /api if missing (e.g. if set to Render root URL)
+  if (!url.endsWith("/api")) {
+    url = `${url}/api`;
+  }
+  return url;
+};
+
+const API_BASE_URL = getApiBaseUrl();
 
 export const api = axios.create({
   baseURL: API_BASE_URL,
